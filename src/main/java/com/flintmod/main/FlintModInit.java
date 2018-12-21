@@ -15,8 +15,8 @@ public class FlintModInit
 {
 	public static final String MODID = "flintmod";
 	public static final String MOD_NAME = "Flint Instead of Wood";
-	public static final String MOD_VERSION = "6.4";
-	public static final String MINECRAFT_VERSION = "1.10";
+	public static final String MOD_VERSION = "8.1";
+	public static final String MINECRAFT_VERSION = "1.11.2";
 		
 	@SidedProxy(clientSide="com." + MODID + ".proxies.ClientProxy", serverSide="com." + MODID + ".proxies.CommonProxy")
 	public static CommonProxy proxy;

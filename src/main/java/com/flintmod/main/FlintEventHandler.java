@@ -4,10 +4,13 @@ import com.flintmod.items.FlintItemInit;
 
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.DamageSource;
@@ -23,7 +26,7 @@ public class FlintEventHandler
 	public void onBreakSpeed(PlayerEvent.BreakSpeed event)
 	{
 		EntityPlayer player = event.getEntityPlayer();
-		World world = event.getEntityPlayer().worldObj;
+		World world = event.getEntityPlayer().getEntityWorld();
 		ItemStack stack = player.getHeldItemMainhand();
 		IBlockState state = event.getState();
 
@@ -39,8 +42,12 @@ public class FlintEventHandler
 				{
 					if(stack == null || !(stack.getItem() instanceof ItemTool))
 					{
-						final float amount = 0.1428571428571F; // 1 health / 7 hits per log with no tool
-						player.attackEntityFrom(DamageSource.generic, amount);
+						float amount = 0.1428571428571F; // 1 health / 7 hits per log with no tool
+						if(player.getMaxHealth() - player.getHealth() < 0.25F)
+						{
+							amount *= 4; // if they're at full health, get their attention with extra damage
+						}
+						player.attackEntityFrom(DamageSource.GENERIC, amount);
 					}
 				}
 			}
@@ -60,7 +67,7 @@ public class FlintEventHandler
 				entityitem.motionX = (double)((float)event.getWorld().rand.nextGaussian() * f3);
 				entityitem.motionY = (double)((float)event.getWorld().rand.nextGaussian() * f3 + 0.2F);
 				entityitem.motionZ = (double)((float)event.getWorld().rand.nextGaussian() * f3);
-				event.getWorld().spawnEntityInWorld(entityitem);
+				event.getWorld().spawnEntity(entityitem);
 			}
 		}
 	}
@@ -68,14 +75,15 @@ public class FlintEventHandler
 	@SubscribeEvent
 	public void onHarvestBlock(BlockEvent.HarvestDropsEvent event)
 	{
-		final int FLINT_CHANCE = 50;
 		final EntityPlayer PLAYER = event.getHarvester();
-		// null-check before accessing ItemStack (fix #2)
-		if(null == PLAYER || null == PLAYER.getHeldItemMainhand()) return;
+		final ItemStack HELD = PLAYER != null ? PLAYER.getHeldItemMainhand() : null;
+		// much more likely to get flint from gravel when using flint shovel
+		if(HELD != null && HELD.getItem() == FlintItemInit.flintShovel)
+		{		
+			int looting = Math.max(0, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, HELD));
+			final int FLINT_CHANCE = 50 + (looting * 15);
 
-		if(event.getState().getBlock() == Blocks.GRAVEL && event.getWorld().rand.nextInt(100) < FLINT_CHANCE)
-		{
-			if(PLAYER.getHeldItemMainhand().getItem() == FlintItemInit.flintShovel)
+			if(event.getState().getBlock() == Blocks.GRAVEL && event.getWorld().rand.nextInt(100) < FLINT_CHANCE)
 			{
 				event.getDrops().clear();
 				event.getDrops().add(new ItemStack(Items.FLINT, 1, 0));
@@ -85,6 +93,6 @@ public class FlintEventHandler
 	
 	public static boolean isAxe(ItemStack s)
 	{
-		return s != null && s.getItem() != null && s.getItem().getHarvestLevel(s, "axe") >= 0;
+		return s != null && s.getItem() != null && (s.getItem() instanceof ItemAxe || s.getItem().getHarvestLevel(s, "axe", null, null) >= 0);
 	}
 }

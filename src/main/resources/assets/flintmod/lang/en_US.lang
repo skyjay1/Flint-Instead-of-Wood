@@ -1,0 +1,10 @@
+item.toolPartFlint.name=Sharpened Flint
+item.swordFlint.name=Flint Sword
+item.knifeFlint.name=Flint Knife
+item.spadeFlint.name=Flint Spade
+item.pickaxeFlint.name=Flint Pick
+item.axeFlint.name=Flint Hatchet
+item.hoeFlint.name=Flint Hoe
+
+tooltip.increased_chance_to_harvest=Increased chance to harvest
+tooltip.flint_from_gravel=flint from gravel
