@@ -11,6 +11,9 @@ public class Config
 	public static boolean CRAFT_SHOVEL;
 	public static boolean DISABLE_BREAKING_WOOD;
 	public static boolean HURT_WHEN_BREAKING_WOOD;
+	public static boolean REPLACE_IN_LOOT_CHESTS;
+	public static boolean REPLACE_IN_LOOT_CHESTS_STONE;
+
 	
 	public static boolean REMOVE_WOODEN;
 	public static boolean REMOVE_STONE;
@@ -41,8 +44,10 @@ public class Config
 				"When true, removes crafting recipes for all wooden tools");
 		REMOVE_STONE = config.getBoolean("Remove Stone Tools", CRAFTING, false, 
 				"When true, removes crafting recipes for all stone tools");
-		
-		CHANCE_DROP_STICKS = config.getInt("Stick drop chance", WORLD, 35, 0, 100, 
+		REPLACE_IN_LOOT_CHESTS = config.getBoolean("Replace in Loot Chests", WORLD, true, 
+				"When true, loot chests will replace wooden tools with flint tools");
+
+		CHANCE_DROP_STICKS = config.getInt("Stick drop chance", WORLD, 30, 0, 100, 
 				"Percent chance for leaves to drop sticks when broken");
 		FLINT_DURABILITY = config.getInt("Flint durability", WORLD, 59, 1, 250, 
 				"Base durability of flint tools (wood=59, stone=131, iron=250)");

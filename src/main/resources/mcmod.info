@@ -1,0 +1,16 @@
+[
+{
+  "modid": "flintmod",
+  "name": "Flint Instead of Wood",
+  "description": "Simple replacement of wooden tools with flint counterparts. It makes more sense!",
+  "version": "8.1",
+  "mcversion": "1.11.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["skyjay1"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

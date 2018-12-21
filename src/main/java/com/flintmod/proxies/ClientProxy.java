@@ -11,12 +11,12 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerRenders() 
 	{
-		registerItem(FlintItemInit.flintAxe);
-		registerItem(FlintItemInit.flintHoe);
-		registerItem(FlintItemInit.flintPick);
-		registerItem(FlintItemInit.flintShovel);
-		registerItem(FlintItemInit.flintSword);
-		registerItem(FlintItemInit.flintToolHead);
+		registerItem(FlintItemInit.FLINT_AXE);
+		registerItem(FlintItemInit.FLINT_HOE);
+		registerItem(FlintItemInit.FLINT_PICK);
+		registerItem(FlintItemInit.FLINT_SHOVEL);
+		registerItem(FlintItemInit.FLINT_SWORD);
+		registerItem(FlintItemInit.FLINT_TOOL_HEAD);
 	}
 	
 	private void registerItem(Item item)
