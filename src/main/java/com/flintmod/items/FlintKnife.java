@@ -3,6 +3,7 @@ package com.flintmod.items;
 import com.flintmod.main.FlintModInit;
 import com.google.common.collect.Multimap;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -11,11 +12,12 @@ import net.minecraft.item.ItemSword;
 public class FlintKnife extends ItemSword
 {
 
-	public FlintKnife(ToolMaterial material, String name) 
+	public FlintKnife(String name) 
 	{
-		super(material);
+		super(FlintItems.FLINT);
 		this.setUnlocalizedName(name);
 		this.setRegistryName(FlintModInit.MODID, name);
+		this.setCreativeTab(CreativeTabs.COMBAT);
 	}
 	
 	 /**

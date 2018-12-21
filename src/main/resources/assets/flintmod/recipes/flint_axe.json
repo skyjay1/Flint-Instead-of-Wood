@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FF",
+    "SF"],
+  "key": {
+    "F": {
+        "item": "minecraft:flint"
+      },
+    "S": {
+	  "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "flintmod:axe_flint"
+  }
+}

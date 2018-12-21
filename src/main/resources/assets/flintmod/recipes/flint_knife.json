@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "F",
+    "S"],
+  "key": {
+    "F": {
+        "item": "flintmod:tool_part_flint"
+      },
+    "S": {
+	  "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "flintmod:knife_flint"
+  }
+}

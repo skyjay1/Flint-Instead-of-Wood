@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FT",
+    "S "],
+  "key": {
+    "T": {
+        "item": "flintmod:tool_part_flint"
+      },
+    "F": {
+        "item": "minecraft:flint"
+      },
+    "S": {
+	  "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "flintmod:pickaxe_flint"
+  }
+}
