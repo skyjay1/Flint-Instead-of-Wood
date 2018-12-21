@@ -10,12 +10,12 @@ public class FlintItemInit
 {
 	public static final Item.ToolMaterial FLINT = EnumHelper.addToolMaterial("FLINT", Config.FLINT_HARVEST_LEVEL, Config.FLINT_DURABILITY, 2.0F, 0.0F, 15);
 	
-	public static Item flintToolHead;
-	public static Item flintSword;
-	public static Item flintShovel;
-	public static Item flintHoe;
-	public static Item flintAxe;
-	public static Item flintPick;
+	public static Item FLINT_TOOL_HEAD;
+	public static Item FLINT_SWORD;
+	public static Item FLINT_SHOVEL;
+	public static Item FLINT_HOE;
+	public static Item FLINT_AXE;
+	public static Item FLINT_PICK;
 	
 	public static void mainRegistry()
 	{
@@ -25,22 +25,22 @@ public class FlintItemInit
 
 	private static void initItems() 
 	{
-		flintToolHead = new Item().setUnlocalizedName("toolPartFlint").setRegistryName("toolPartFlint");
-		flintSword = new FlintKnife(FLINT, "knifeFlint");
-		flintHoe = new FlintHoe(FLINT, "hoeFlint");
-		flintShovel = new FlintSpade(FLINT, "spadeFlint");
-		flintAxe = new FlintAxe(FLINT, "axeFlint");
-		flintPick = new FlintPickaxe(FLINT, "pickaxeFlint");
+		FLINT_TOOL_HEAD = new Item().setUnlocalizedName("tool_part_flint").setRegistryName("tool_part_flint");
+		FLINT_SWORD = new FlintKnife(FLINT, "knife_flint");
+		FLINT_HOE = new FlintHoe(FLINT, "hoe_flint");
+		FLINT_SHOVEL = new FlintSpade(FLINT, "spade_flint");
+		FLINT_AXE = new FlintAxe(FLINT, "axe_flint");
+		FLINT_PICK = new FlintPickaxe(FLINT, "pickaxe_flint");
 	}
 	
 	private static void registerItems()
 	{
-		register(flintToolHead);
-		register(flintSword);
-		register(flintShovel);
-		register(flintAxe);
-		register(flintPick);
-		register(flintHoe);
+		register(FLINT_TOOL_HEAD);
+		register(FLINT_SWORD);
+		register(FLINT_SHOVEL);
+		register(FLINT_AXE);
+		register(FLINT_PICK);
+		register(FLINT_HOE);
 	}
 
 	private static void register(Item i) 

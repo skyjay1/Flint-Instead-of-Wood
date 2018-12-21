@@ -46,28 +46,29 @@ public class CraftingHandler
 
 	private static void addModRecipes()
 	{
-		GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.flintToolHead), "F "," F",'F',Items.FLINT);
-		GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.flintToolHead), " F","F ",'F',Items.FLINT);
+		GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.FLINT_TOOL_HEAD), "F "," F",'F',Items.FLINT);
+		GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.FLINT_TOOL_HEAD), " F","F ",'F',Items.FLINT);
 		
 		if(Config.CRAFT_AXE)
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.flintAxe), "FF","SF",'H',FlintItemInit.flintToolHead,'F',Items.FLINT,'S',Items.STICK);
+			GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.FLINT_AXE), "FF","SF",'H',FlintItemInit.FLINT_TOOL_HEAD,'F',Items.FLINT,'S',Items.STICK);
 		}
 		if(Config.CRAFT_HOE)
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.flintHoe), "FF","S ",'F',Items.FLINT,'S',Items.STICK);
+			GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.FLINT_HOE), "FF","S ",'F',Items.FLINT,'S',Items.STICK);
 		}
 		if(Config.CRAFT_PICK)
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.flintPick), "HF","S ",'H',FlintItemInit.flintToolHead,'F',Items.FLINT,'S',Items.STICK);
+			GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.FLINT_PICK), "HF","S ",'H',FlintItemInit.FLINT_TOOL_HEAD,'F',Items.FLINT,'S',Items.STICK);
+			GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.FLINT_PICK), "FH","S ",'H',FlintItemInit.FLINT_TOOL_HEAD,'F',Items.FLINT,'S',Items.STICK);
 		}
 		if(Config.CRAFT_SHOVEL)
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.flintShovel), "F","S",'F',Items.FLINT,'S',Items.STICK);
+			GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.FLINT_SHOVEL), "F","S",'F',Items.FLINT,'S',Items.STICK);
 		}
 		if(Config.CRAFT_SWORD)
 		{
-			GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.flintSword), "H","S",'H',FlintItemInit.flintToolHead,'S',Items.STICK);
+			GameRegistry.addShapedRecipe(new ItemStack(FlintItemInit.FLINT_SWORD), "H","S",'H',FlintItemInit.FLINT_TOOL_HEAD,'S',Items.STICK);
 		}
 	}
 }
