@@ -2,14 +2,15 @@ package com.flintmod.items;
 
 import com.flintmod.main.FlintModInit;
 
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemHoe;
 
-public class FlintHoe extends ItemHoe
-{
-	public FlintHoe(ToolMaterial material, String name) 
-	{
-		super(material);
-		this.setUnlocalizedName(name);
+public class FlintHoe extends ItemHoe {
+	
+	public FlintHoe(final String name, final Item.Properties properties) {
+		super(FlintItemInit.FLINT, -2.0F, properties.maxStackSize(1));
 		this.setRegistryName(FlintModInit.MODID, name);
 	}
 }

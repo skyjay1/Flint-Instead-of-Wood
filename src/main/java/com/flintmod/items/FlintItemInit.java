@@ -1,50 +1,49 @@
 package com.flintmod.items;
 
-import com.flintmod.main.Config;
+import com.flintmod.main.FlintConfig;
+import com.flintmod.main.FlintModInit;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.registries.ObjectHolder;
 
-public class FlintItemInit 
-{
-	public static final Item.ToolMaterial FLINT = EnumHelper.addToolMaterial("FLINT", Config.FLINT_HARVEST_LEVEL, Config.FLINT_DURABILITY, 2.0F, 0.0F, 15);
+public class FlintItemInit {
 	
+	public static final IItemTier FLINT = new IItemTier() {
+		public int getMaxUses() { return FlintConfig.ITEMS.FLINT_DURABILITY.get(); }
+
+		public float getEfficiency() { return 2.0F; }
+
+		public float getAttackDamage() { return FlintConfig.ITEMS.FLINT_TIER.get(); }
+
+		public int getHarvestLevel() { return FlintConfig.ITEMS.FLINT_TIER.get(); }
+
+		public int getEnchantability() { return 15; }
+
+		public Ingredient getRepairMaterial() { return Ingredient.fromStacks(new ItemStack(Items.FLINT)); }
+	};
+
+	// EnumHelper.addToolMaterial("FLINT", Config.FLINT_HARVEST_LEVEL,
+	// Config.FLINT_DURABILITY, 2.0F, 0.0F, 15);
+
+	@ObjectHolder(FlintModInit.MODID + ":tool_part_flint")
 	public static Item FLINT_TOOL_HEAD;
+
+	@ObjectHolder(FlintModInit.MODID + ":knife_flint")
 	public static Item FLINT_SWORD;
+
+	@ObjectHolder(FlintModInit.MODID + ":spade_flint")
 	public static Item FLINT_SHOVEL;
+
+	@ObjectHolder(FlintModInit.MODID + ":hoe_flint")
 	public static Item FLINT_HOE;
+
+	@ObjectHolder(FlintModInit.MODID + ":axe_flint")
 	public static Item FLINT_AXE;
+
+	@ObjectHolder(FlintModInit.MODID + ":pickaxe_flint")
 	public static Item FLINT_PICK;
-	
-	public static void mainRegistry()
-	{
-		initItems();
-		registerItems();
-	}
-
-	private static void initItems() 
-	{
-		FLINT_TOOL_HEAD = new Item().setUnlocalizedName("tool_part_flint").setRegistryName("tool_part_flint");
-		FLINT_SWORD = new FlintKnife(FLINT, "knife_flint");
-		FLINT_HOE = new FlintHoe(FLINT, "hoe_flint");
-		FLINT_SHOVEL = new FlintSpade(FLINT, "spade_flint");
-		FLINT_AXE = new FlintAxe(FLINT, "axe_flint");
-		FLINT_PICK = new FlintPickaxe(FLINT, "pickaxe_flint");
-	}
-	
-	private static void registerItems()
-	{
-		register(FLINT_TOOL_HEAD);
-		register(FLINT_SWORD);
-		register(FLINT_SHOVEL);
-		register(FLINT_AXE);
-		register(FLINT_PICK);
-		register(FLINT_HOE);
-	}
-
-	private static void register(Item i) 
-	{
-		GameRegistry.register(i);
-	}
 }
