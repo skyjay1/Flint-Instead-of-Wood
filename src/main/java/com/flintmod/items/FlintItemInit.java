@@ -1,6 +1,5 @@
 package com.flintmod.items;
 
-import com.flintmod.main.FlintConfig;
 import com.flintmod.main.FlintModInit;
 
 import net.minecraft.init.Items;
@@ -13,13 +12,14 @@ import net.minecraftforge.registries.ObjectHolder;
 public class FlintItemInit {
 	
 	public static final IItemTier FLINT = new IItemTier() {
-		public int getMaxUses() { return FlintConfig.ITEMS.FLINT_DURABILITY.get(); }
+		/* TODO configurable numbers */
+		public int getMaxUses() { return 59; /*FlintConfig.ITEMS.FLINT_DURABILITY.get();*/ }
 
 		public float getEfficiency() { return 2.0F; }
 
-		public float getAttackDamage() { return FlintConfig.ITEMS.FLINT_TIER.get(); }
+		public float getAttackDamage() { return 0.0F; /*FlintConfig.ITEMS.FLINT_TIER.get();*/ }
 
-		public int getHarvestLevel() { return FlintConfig.ITEMS.FLINT_TIER.get(); }
+		public int getHarvestLevel() { return 0; /*FlintConfig.ITEMS.FLINT_TIER.get();*/ }
 
 		public int getEnchantability() { return 15; }
 

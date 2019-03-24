@@ -1,0 +1,12 @@
+{
+    "item.flintmod.tool_part_flint": "Sharpened Flint",
+    "item.flintmod.sword_flint": "Flint Sword",
+    "item.flintmod.knife_flint": "Flint Knife",
+    "item.flintmod.spade_flint": "Flint Spade",
+    "item.flintmod.pickaxe_flint": "Flint Pick",
+    "item.flintmod.axe_flint": "Flint Hatchet",
+    "item.flintmod.hoe_flint": "Flint Hoe",
+
+    "tooltip.increased_chance_to_harvest": "Bonus chance to harvest",
+    "tooltip.flint_from_gravel": "%s from %s"
+}

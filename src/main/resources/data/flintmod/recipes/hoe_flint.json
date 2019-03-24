@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+	"FF",
+	" S"
+   ],
+  "key": {
+    "F": {
+       "item": "minecraft:flint"
+      },
+	"S": {
+		"item": "minecraft:stick"
+	  }
+  },
+  "result": {
+    "item": "flintmod:hoe_flint",
+    "count": 1
+  }
+}

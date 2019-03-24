@@ -30,6 +30,7 @@ public class FlintSpade extends ItemSpade {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip,
 			ITooltipFlag flagIn) {
 		tooltip.add(new TextComponentTranslation("tooltip.increased_chance_to_harvest"));
-		tooltip.add(new TextComponentTranslation("tooltip.flint_from_gravel"));
+		tooltip.add(new TextComponentTranslation("tooltip.flint_from_gravel", 
+				"item.minecraft.flint", "block.minecraft.gravel"));
 	}
 }

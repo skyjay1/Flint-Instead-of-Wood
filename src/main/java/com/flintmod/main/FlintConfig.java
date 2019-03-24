@@ -8,38 +8,39 @@ public class FlintConfig {
 	private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 	public static final FlintConfig.ConfigItems ITEMS = new FlintConfig.ConfigItems(BUILDER);
 	public static final FlintConfig.ConfigWorld WORLD = new FlintConfig.ConfigWorld(BUILDER);
+	public static final ForgeConfigSpec SPEC = BUILDER.build();
 
 	public static class ConfigItems {
-		public final ForgeConfigSpec.BooleanValue ENABLE_SWORD;
-		public final ForgeConfigSpec.BooleanValue ENABLE_PICK;
-		public final ForgeConfigSpec.BooleanValue ENABLE_HOE;
-		public final ForgeConfigSpec.BooleanValue ENABLE_AXE;
-		public final ForgeConfigSpec.BooleanValue ENABLE_SHOVEL;
-		public final ForgeConfigSpec.IntValue FLINT_TIER;
+//		public final ForgeConfigSpec.BooleanValue ENABLE_SWORD;
+//		public final ForgeConfigSpec.BooleanValue ENABLE_PICK;
+//		public final ForgeConfigSpec.BooleanValue ENABLE_HOE;
+//		public final ForgeConfigSpec.BooleanValue ENABLE_AXE;
+//		public final ForgeConfigSpec.BooleanValue ENABLE_SHOVEL;
+//		public final ForgeConfigSpec.IntValue FLINT_TIER;
 		public final ForgeConfigSpec.IntValue FLINT_DURABILITY;
 		
 		public ConfigItems(Builder builder) {
 			builder.push("items");
-			ENABLE_AXE = builder
-					.comment("Whether or not the flint axe has a crafting recipe", 
-							"ENABLE THIS if wooden tools are disabled!")
-					.define("Enable Flint Axe", true);
-			ENABLE_SWORD = builder
-				.comment("Whether the flint knife is enabled")
-				.define("Enable Flint Sword", true);
-			ENABLE_PICK = builder
-					.comment("Whether the flint pickaxe is enabled")
-					.define("Enable Flint Pick", true);
-			ENABLE_HOE = builder
-					.comment("Whether the flint hoe is enabled")
-					.define("Enable Flint Hoe", true);
-			ENABLE_SHOVEL = builder
-					.comment("Whether or not the flint spade is enabled")
-					.define("Enable Flint Spade", true);
-			FLINT_TIER = builder
-					.comment("Harvest level of flint tools", 
-							"0=wooden, 1=stone")
-					.defineInRange("Flint Harvest Level", 0, 0, 1);
+//			ENABLE_AXE = builder
+//					.comment("Whether or not the flint axe has a crafting recipe", 
+//							"ENABLE THIS if wooden tools are disabled!")
+//					.define("Enable Flint Axe", true);
+//			ENABLE_SWORD = builder
+//				.comment("Whether the flint knife is enabled")
+//				.define("Enable Flint Sword", true);
+//			ENABLE_PICK = builder
+//					.comment("Whether the flint pickaxe is enabled")
+//					.define("Enable Flint Pick", true);
+//			ENABLE_HOE = builder
+//					.comment("Whether the flint hoe is enabled")
+//					.define("Enable Flint Hoe", true);
+//			ENABLE_SHOVEL = builder
+//					.comment("Whether or not the flint spade is enabled")
+//					.define("Enable Flint Spade", true);
+//			FLINT_TIER = builder
+//					.comment("Harvest level of flint tools", 
+//							"0=wooden, 1=stone")
+//					.defineInRange("Flint Harvest Level", 0, 0, 1);
 			FLINT_DURABILITY = builder
 					.comment("Durability of flint tools", 
 							"wooden=59, stone=131, iron=250")
@@ -56,7 +57,7 @@ public class FlintConfig {
 		public final ForgeConfigSpec.BooleanValue REMOVE_WOOD_RECIPES;
 		public final ForgeConfigSpec.BooleanValue REMOVE_STONE_RECIPES;
 		public final ForgeConfigSpec.BooleanValue REPLACE_IN_LOOT_CHESTS_WOODEN;
-		public final ForgeConfigSpec.BooleanValue REPLACE_IN_LOOT_CHESTS_STONE;
+		//public final ForgeConfigSpec.BooleanValue REPLACE_IN_LOOT_CHESTS_STONE;
 		public final ForgeConfigSpec.BooleanValue DISABLE_BREAKING_WOOD;
 		public final ForgeConfigSpec.BooleanValue HURT_WHEN_BREAKING_WOOD;
 		public final ForgeConfigSpec.IntValue CHANCE_DROP_STICKS;
@@ -73,9 +74,9 @@ public class FlintConfig {
 			REPLACE_IN_LOOT_CHESTS_WOODEN = builder
 					.comment("When true, loot chests will replace wooden tools with flint tools")
 					.define("Replace Wooden in Loot Chests", true);
-			REPLACE_IN_LOOT_CHESTS_STONE = builder
-					.comment("When true, loot chests will replace stone tools with flint tools")
-					.define("Replace Stone in Loot Chests", true);
+			//REPLACE_IN_LOOT_CHESTS_STONE = builder
+			//		.comment("When true, loot chests will replace stone tools with flint tools")
+			//		.define("Replace Stone in Loot Chests", true);
 			DISABLE_BREAKING_WOOD = builder
 					.comment("When true, logs may only be harvested using an axe")
 					.define("Disable Breaking Logs", false);

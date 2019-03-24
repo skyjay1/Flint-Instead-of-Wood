@@ -1,6 +1,5 @@
 package com.flintmod.main;
 
-import com.flintmod.items.FlintItemInit;
 import com.flintmod.proxies.ClientProxy;
 import com.flintmod.proxies.CommonProxy;
 
@@ -10,9 +9,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -29,10 +28,10 @@ public class FlintModInit {
 			() -> () -> new CommonProxy());
 	
 	public FlintModInit() {
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, FlintConfig.SPEC);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		MinecraftForge.EVENT_BUS.register(new FlintEventHandler());
-
-
+		MinecraftForge.EVENT_BUS.register(this);
 		//GolemEntityTypes.init();
 		//ExtraGolemsConfig.setupConfig();
 		//ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER /*world*/, ExtraGolemsConfig.SERVER_CONFIG);
@@ -44,19 +43,26 @@ public class FlintModInit {
 	
 	@SubscribeEvent
 	public static void registerItems(final RegistryEvent.Register<Item> event) {
+		System.out.println("flintmod: RegisterItems");
 		PROXY.registerItems(event);
 	}
 	
 	@SubscribeEvent
 	public static void registerModels(final ModelRegistryEvent event) {
+		System.out.println("flintmod: RegisterModels");
 		PROXY.registerModels(event);
 	}
-
-	@Mod.EventHandler
-	public static void preInit(FMLPreInitializationEvent event) {
-		//Config.mainRegistry(new Configuration(event.getSuggestedConfigurationFile()));
-		FlintItemInit.mainRegistry();
-		CraftingHandler.mainRegistry();
-		PROXY.registerRenders();
+	
+	@SubscribeEvent
+	public static void onLoadConfig(final ModConfig.Loading configEvent) {
+		
 	}
+//
+//	@Mod.EventHandler
+//	public static void preInit(FMLPreInitializationEvent event) {
+//		//Config.mainRegistry(new Configuration(event.getSuggestedConfigurationFile()));
+//		FlintItemInit.mainRegistry();
+//		CraftingHandler.mainRegistry();
+//		PROXY.registerRenders();
+//	}
 }

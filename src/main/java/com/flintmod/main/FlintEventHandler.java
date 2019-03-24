@@ -15,7 +15,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTier;
+import net.minecraft.item.ItemTiered;
 import net.minecraft.item.ItemTool;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,11 +28,15 @@ import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Type;
 
 public class FlintEventHandler {
 	private static final Item[] WOOD_TOOLS = { Items.WOODEN_AXE, Items.WOODEN_HOE, Items.WOODEN_PICKAXE,
@@ -41,20 +49,21 @@ public class FlintEventHandler {
 	/** Used to replace wooden tools in loot tables with flint ones **/
 	@SubscribeEvent
 	public void onLoadLootTable(LootTableLoadEvent event) {
+		// TODO this method is not being called for loot chests, or at all for that matter
+		
+		
 		// first check if config allows you to do this
 		final boolean replaceWood = FlintConfig.WORLD.REPLACE_IN_LOOT_CHESTS_WOODEN.get();
-		final boolean replaceStone = FlintConfig.WORLD.REPLACE_IN_LOOT_CHESTS_STONE.get();
-		if (!(replaceWood || replaceStone))
-			return;
 		// check for pools until there aren't any left to check
 		String poolName = "";
 		int poolsFound = 0;
-		while (true) {
+		while (poolsFound < 10) {
 			poolName = getNextPoolName(poolsFound);
 			LootPool pool = event.getTable().getPool(poolName);
 
 			if (null == pool) {
 				// there's no pool with this name, so give up and finish
+				System.out.println("No pool found for pool #" + poolsFound);
 				return;
 			}
 
@@ -71,12 +80,63 @@ public class FlintEventHandler {
 							new LootCondition[] {}, replacement.getRegistryName().toString());
 					pool.removeEntry(name);
 					pool.addEntry(newEntry);
+					System.out.println("Replaced entry of " + name + " with " + newEntry.getEntryName());
 				}
 			}
 			// increase this field to check for a different pool next time
 			++poolsFound;
 		}
 
+	}
+	
+	@SubscribeEvent
+	public void onCraftItem(net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent event) {
+		if(isWooden(event.getCrafting()) && FlintConfig.WORLD.REMOVE_WOOD_RECIPES.get()) {
+			event.getCrafting().setDamage(event.getCrafting().getMaxDamage());
+			NBTTagCompound nbt = event.getCrafting().getOrCreateTag();
+			nbt.setTag("AttributeModifiers", new NBTTagList());
+		}
+	}
+	
+	@SubscribeEvent
+	public void onTickEvent(net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent event) {
+		if(event.type == Type.PLAYER && event.side == LogicalSide.SERVER 
+				&& event.player != null && event.player.ticksExisted % 4 == 0) {
+			ItemStack mainhand = event.player.getHeldItemMainhand();
+			ItemStack offhand = event.player.getHeldItemOffhand();
+			if(isWooden(mainhand)) {
+				mainhand.setDamage(mainhand.getMaxDamage());
+				NBTTagCompound nbt = mainhand.getOrCreateTag();
+				nbt.setTag("AttributeModifiers", new NBTTagList());
+			}
+			if(isWooden(offhand)) {
+				offhand.setDamage(offhand.getMaxDamage());
+				NBTTagCompound nbt = offhand.getOrCreateTag();
+				nbt.setTag("AttributeModifiers", new NBTTagList());
+			}
+		}
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	@SubscribeEvent
+	public void onTooltip(net.minecraftforge.event.entity.player.ItemTooltipEvent event) {
+//		if (isWooden(event.getItemStack())) {
+//			net.minecraft.util.text.ITextComponent name = (new net.minecraft.util.text.TextComponentString(""))
+//					 .appendSibling(event.getItemStack().getDisplayName())
+//					 .applyTextStyle(event.getItemStack().getRarity().color);
+//		      if (event.getItemStack().hasDisplayName()) {
+//		         name.applyTextStyle(net.minecraft.util.text.TextFormatting.ITALIC);
+//		      }
+//			event.getToolTip().clear();
+//			event.getToolTip().add(name);
+//		}
+	}
+	
+	@SubscribeEvent
+	public void onAttackEntity(net.minecraftforge.event.entity.player.AttackEntityEvent event) {
+		if(isWooden(event.getEntityPlayer().getActiveItemStack())) {
+			//event.setCanceled(true);
+		}
 	}
 
 	/**
@@ -86,18 +146,17 @@ public class FlintEventHandler {
 	@SubscribeEvent
 	public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
 		EntityPlayer player = event.getEntityPlayer();
-		World world = event.getEntityPlayer().getEntityWorld();
 		ItemStack stack = player.getHeldItemMainhand();
 		IBlockState state = event.getState();
 
 		if (state.getBlock() instanceof BlockLog) {
-			if (!isAxe(stack)) {
-				if (FlintConfig.DISABLE_BREAKING_WOOD) {
+			if (!isAxe(player, state, stack)) {
+				if (FlintConfig.WORLD.DISABLE_BREAKING_WOOD.get()) {
 					event.setCanceled(true);
-				} else if (FlintConfig.HURT_WHEN_BREAKING_WOOD) {
+				} else if (FlintConfig.WORLD.HURT_WHEN_BREAKING_WOOD.get()) {
 					if (stack == null
 							|| !(stack.getItem() instanceof ItemTool || stack.getItem() instanceof ItemSword)) {
-						float amount = 0.1428571428571F; // 1 health / 7 hits per log with no tool
+						float amount = 0.2828571428571F; // 1 health / 7 hits per log with no tool
 						if (player.getMaxHealth() - player.getHealth() < 0.25F) {
 							amount *= 4; // if they're at full health, get their attention with extra damage
 						}
@@ -130,7 +189,7 @@ public class FlintEventHandler {
 		final EntityPlayer PLAYER = event.getHarvester();
 		final ItemStack HELD = PLAYER != null ? PLAYER.getHeldItemMainhand() : null;
 		// much more likely to get flint from gravel when using flint shovel
-		if (HELD != null && HELD.getItem() == FlintItemInit.FLINT_SHOVEL) {
+		if (/*FlintConfig.ITEMS.ENABLE_SHOVEL.get() &&*/ HELD != null && HELD.getItem() == FlintItemInit.FLINT_SHOVEL) {
 			int looting = Math.max(0, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, HELD));
 			final int FLINT_CHANCE = 50 + (looting * 15);
 
@@ -144,7 +203,13 @@ public class FlintEventHandler {
 	/** Shortcut method to detect if a given ItemStack is considered an Axe **/
 	public static boolean isAxe(final EntityPlayer player, final IBlockState state, final ItemStack s) {
 		return s != null && s.getItem() != null
-				&& (s.getItem() instanceof ItemAxe || s.getHarvestLevel(ToolType.AXE, player, state) >= 0);
+				&& (s.getToolTypes().contains(ToolType.AXE) || s.getItem() instanceof ItemAxe);
+	}
+	
+	/** @return true if the stack contains a non-null ItemTiered that is WOOD tier **/
+	public static boolean isWooden(final ItemStack stack) {
+		return stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemTiered 
+				&& ((ItemTiered)stack.getItem()).getTier() == ItemTier.WOOD;
 	}
 
 	private static String getNextPoolName(int poolsFound) {

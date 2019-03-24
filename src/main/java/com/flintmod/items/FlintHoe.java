@@ -2,9 +2,7 @@ package com.flintmod.items;
 
 import com.flintmod.main.FlintModInit;
 
-import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemHoe;
 
 public class FlintHoe extends ItemHoe {
