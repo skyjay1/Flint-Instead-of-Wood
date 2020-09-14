@@ -1,0 +1,10 @@
+item.tool_part_flint.name=깎은 부싯돌
+item.sword_flint.name=부싯돌 검
+item.knife_flint.name=부싯돌 칼
+item.spade_flint.name=부싯돌 삽
+item.pickaxe_flint.name=부싯돌 곡괭이
+item.axe_flint.name=부싯돌 도끼
+item.hoe_flint.name=부싯돌 괭이
+
+tooltip.increased_chance_to_harvest=자갈에서 부싯돌을 얻을
+tooltip.flint_from_gravel=확률이 증가합니다
