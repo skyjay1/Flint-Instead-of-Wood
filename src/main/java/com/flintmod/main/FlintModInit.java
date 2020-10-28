@@ -20,9 +20,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class FlintModInit {
 	
 	public static final String MODID = "flintmod";
-	public static final String MOD_NAME = "Flint Instead of Wood";
-	public static final String MOD_VERSION = "8.1";
-	public static final String MINECRAFT_VERSION = "1.11.2";
 
 	public static final CommonProxy PROXY = DistExecutor.runForDist(() -> () -> new ClientProxy(),
 			() -> () -> new CommonProxy());
@@ -32,9 +29,6 @@ public class FlintModInit {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		MinecraftForge.EVENT_BUS.register(new FlintEventHandler());
 		MinecraftForge.EVENT_BUS.register(this);
-		//GolemEntityTypes.init();
-		//ExtraGolemsConfig.setupConfig();
-		//ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER /*world*/, ExtraGolemsConfig.SERVER_CONFIG);
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {

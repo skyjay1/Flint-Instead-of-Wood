@@ -7,7 +7,7 @@ loaderVersion="[2.0,)"
 # A URL to query for updates
 #updateJSONURL="http://myurl.me/"
 # A URL to refer people to when problems occur with this mod
-#issueTrackerURL="https://github.com/MinecraftModDevelopmentMods/Extra-Golems/issues"
+#issueTrackerURL=""
 
 [[mods]]
     modId="flintmod"

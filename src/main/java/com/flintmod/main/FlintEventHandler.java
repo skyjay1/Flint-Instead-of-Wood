@@ -21,6 +21,7 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootEntry;
@@ -102,17 +103,13 @@ public class FlintEventHandler {
 	public void onTickEvent(net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent event) {
 		if(event.type == Type.PLAYER && event.side == LogicalSide.SERVER 
 				&& event.player != null && event.player.ticksExisted % 4 == 0) {
-			ItemStack mainhand = event.player.getHeldItemMainhand();
-			ItemStack offhand = event.player.getHeldItemOffhand();
-			if(isWooden(mainhand)) {
-				mainhand.setDamage(mainhand.getMaxDamage());
-				NBTTagCompound nbt = mainhand.getOrCreateTag();
-				nbt.setTag("AttributeModifiers", new NBTTagList());
-			}
-			if(isWooden(offhand)) {
-				offhand.setDamage(offhand.getMaxDamage());
-				NBTTagCompound nbt = offhand.getOrCreateTag();
-				nbt.setTag("AttributeModifiers", new NBTTagList());
+			for(EnumHand hand : EnumHand.values()) {
+				ItemStack heldItem = event.player.getHeldItem(hand);
+				if(isWooden(heldItem)) {
+					//heldItem.setDamage(heldItem.getMaxDamage());
+					NBTTagCompound nbt = heldItem.getOrCreateTag();
+					nbt.setTag("AttributeModifiers", new NBTTagList());
+				}
 			}
 		}
 	}
