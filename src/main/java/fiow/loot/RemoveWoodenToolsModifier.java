@@ -14,6 +14,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -22,9 +23,9 @@ import java.util.Map;
 
 public class RemoveWoodenToolsModifier extends LootModifier {
 
-    private final Map<Item, Item> itemMap;
+    private final Map<ResourceLocation, RegistryObject<Item>> itemMap;
 
-    protected RemoveWoodenToolsModifier(final LootItemCondition[] conditionsIn, Map<Item, Item> itemMap) {
+    protected RemoveWoodenToolsModifier(final LootItemCondition[] conditionsIn, Map<ResourceLocation, RegistryObject<Item>> itemMap) {
         super(conditionsIn);
         this.itemMap = itemMap;
     }
@@ -43,9 +44,9 @@ public class RemoveWoodenToolsModifier extends LootModifier {
         List<ItemStack> modifiedLoot = new ArrayList<>();
         for (ItemStack itemStack : generatedLoot) {
             // replace items that are present in the map with their counterpart
-            Item replace = itemMap.get(itemStack.getItem());
-            if (replace != null) {
-                modifiedLoot.add(new ItemStack(replace, itemStack.getCount(), itemStack.getTag()));
+            RegistryObject<Item> replace = itemMap.get(itemStack.getItem().getRegistryName());
+            if (replace != null && replace.isPresent()) {
+                modifiedLoot.add(new ItemStack(replace.get(), itemStack.getCount(), itemStack.getTag()));
             } else {
                 modifiedLoot.add(itemStack);
             }
@@ -64,20 +65,20 @@ public class RemoveWoodenToolsModifier extends LootModifier {
         @Override
         public RemoveWoodenToolsModifier read(ResourceLocation name, JsonObject object, LootItemCondition[] conditionsIn) {
             // locate resource location for each item
-            ResourceLocation sAxe = new ResourceLocation(GsonHelper.getAsString(object, AXE, AXE));
-            ResourceLocation sHoe = new ResourceLocation(GsonHelper.getAsString(object, HOE, HOE));
-            ResourceLocation sPickaxe = new ResourceLocation(GsonHelper.getAsString(object, PICKAXE, PICKAXE));
-            ResourceLocation sShovel = new ResourceLocation(GsonHelper.getAsString(object, SHOVEL, SHOVEL));
-            ResourceLocation sSword = new ResourceLocation(GsonHelper.getAsString(object, SWORD, SWORD));
+            ResourceLocation axeId = new ResourceLocation(GsonHelper.getAsString(object, AXE, AXE));
+            ResourceLocation hoeId = new ResourceLocation(GsonHelper.getAsString(object, HOE, HOE));
+            ResourceLocation pickaxeId = new ResourceLocation(GsonHelper.getAsString(object, PICKAXE, PICKAXE));
+            ResourceLocation shovelId = new ResourceLocation(GsonHelper.getAsString(object, SHOVEL, SHOVEL));
+            ResourceLocation swordId = new ResourceLocation(GsonHelper.getAsString(object, SWORD, SWORD));
 
             // build map for the given items
-            ImmutableMap<Item, Item> map = new ImmutableMap
-                    .Builder<Item, Item>()
-                    .put(Items.WOODEN_AXE, ForgeRegistries.ITEMS.getValue(sAxe))
-                    .put(Items.WOODEN_HOE, ForgeRegistries.ITEMS.getValue(sHoe))
-                    .put(Items.WOODEN_PICKAXE, ForgeRegistries.ITEMS.getValue(sPickaxe))
-                    .put(Items.WOODEN_SHOVEL, ForgeRegistries.ITEMS.getValue(sShovel))
-                    .put(Items.WOODEN_SWORD, ForgeRegistries.ITEMS.getValue(sSword))
+            ImmutableMap<ResourceLocation, RegistryObject<Item>> map = new ImmutableMap
+                    .Builder<ResourceLocation, RegistryObject<Item>>()
+                    .put(Items.WOODEN_AXE.getRegistryName(), RegistryObject.create(axeId, ForgeRegistries.ITEMS))
+                    .put(Items.WOODEN_HOE.getRegistryName(), RegistryObject.create(hoeId, ForgeRegistries.ITEMS))
+                    .put(Items.WOODEN_PICKAXE.getRegistryName(), RegistryObject.create(pickaxeId, ForgeRegistries.ITEMS))
+                    .put(Items.WOODEN_SHOVEL.getRegistryName(), RegistryObject.create(shovelId, ForgeRegistries.ITEMS))
+                    .put(Items.WOODEN_SWORD.getRegistryName(), RegistryObject.create(swordId, ForgeRegistries.ITEMS))
                     .build();
 
             return new RemoveWoodenToolsModifier(conditionsIn, map);
@@ -85,12 +86,13 @@ public class RemoveWoodenToolsModifier extends LootModifier {
 
         @Override
         public JsonObject write(RemoveWoodenToolsModifier instance) {
+            RegistryObject<Item> AIR = RegistryObject.create(new ResourceLocation("air"), ForgeRegistries.ITEMS);
             JsonObject json = makeConditions(instance.conditions);
-            json.add(AXE, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_AXE, Items.AIR).getRegistryName().toString()));
-            json.add(HOE, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_HOE, Items.AIR).getRegistryName().toString()));
-            json.add(PICKAXE, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_PICKAXE, Items.AIR).getRegistryName().toString()));
-            json.add(SHOVEL, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_SHOVEL, Items.AIR).getRegistryName().toString()));
-            json.add(SWORD, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_SWORD, Items.AIR).getRegistryName().toString()));
+            json.add(AXE, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_AXE.getRegistryName(), AIR).getId().toString()));
+            json.add(HOE, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_HOE.getRegistryName(), AIR).getId().toString()));
+            json.add(PICKAXE, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_PICKAXE.getRegistryName(), AIR).getId().toString()));
+            json.add(SHOVEL, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_SHOVEL.getRegistryName(), AIR).getId().toString()));
+            json.add(SWORD, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_SWORD.getRegistryName(), AIR).getId().toString()));
             return json;
         }
     }

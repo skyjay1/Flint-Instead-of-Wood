@@ -20,6 +20,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -28,11 +29,11 @@ public class BonusStickLootModifier extends LootModifier {
 
     private final TagKey<Block> leavesTag;
     private final float stickChance;
-    private final Item stick;
+    private final RegistryObject<Item> stick;
     private final int count;
 
     protected BonusStickLootModifier(final LootItemCondition[] conditionsIn, final TagKey<Block> leavesTag,
-                                     final float stickChance, final Item stick, final int count) {
+                                     final float stickChance, final RegistryObject<Item> stick, final int count) {
         super(conditionsIn);
         this.leavesTag = leavesTag;
         this.stickChance = stickChance;
@@ -43,10 +44,15 @@ public class BonusStickLootModifier extends LootModifier {
     @Nonnull
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+        // do not apply when incorrectly parsed
+        if(!stick.isPresent()) {
+            return generatedLoot;
+        }
+        // determine loot parameter values
         Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
         ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
         BlockState block = context.getParamOrNull(LootContextParams.BLOCK_STATE);
-        // do not apply when missing a value or no loot
+        // do not apply when missing a value
         if (entity == null || tool == null || block == null) {
             return generatedLoot;
         }
@@ -63,7 +69,7 @@ public class BonusStickLootModifier extends LootModifier {
             return generatedLoot;
         }
         // add stick to loot
-        generatedLoot.add(new ItemStack(stick, count));
+        generatedLoot.add(new ItemStack(stick.get(), count));
         return generatedLoot;
     }
 
@@ -76,13 +82,11 @@ public class BonusStickLootModifier extends LootModifier {
 
         @Override
         public BonusStickLootModifier read(ResourceLocation name, JsonObject object, LootItemCondition[] conditionsIn) {
-            String sLeavesFallback = BlockTags.LEAVES.location().toString();
-            ResourceLocation sLeaves = new ResourceLocation(GsonHelper.getAsString(object, LEAVES, sLeavesFallback));
-            TagKey<Block> leaves = ForgeRegistries.BLOCKS.tags().createTagKey(sLeaves);
+            ResourceLocation leavesId = new ResourceLocation(GsonHelper.getAsString(object, LEAVES, BlockTags.LEAVES.location().toString()));
+            TagKey<Block> leaves = ForgeRegistries.BLOCKS.tags().createTagKey(leavesId);
             float chance = GsonHelper.getAsFloat(object, CHANCE, 0.5F);
-            String sStickFallback = Items.STICK.getRegistryName().toString();
-            ResourceLocation sFlint = new ResourceLocation(GsonHelper.getAsString(object, STICK, sStickFallback));
-            Item stick = ForgeRegistries.ITEMS.getValue(sFlint);
+            ResourceLocation stickId = new ResourceLocation(GsonHelper.getAsString(object, STICK, Items.STICK.getRegistryName().toString()));
+            RegistryObject<Item> stick = RegistryObject.create(stickId, ForgeRegistries.ITEMS);
             int count = GsonHelper.getAsInt(object, COUNT, 1);
             return new BonusStickLootModifier(conditionsIn, leaves, chance, stick, count);
         }
@@ -92,7 +96,7 @@ public class BonusStickLootModifier extends LootModifier {
             JsonObject json = makeConditions(instance.conditions);
             json.add(LEAVES, new JsonPrimitive(instance.leavesTag.location().toString()));
             json.add(CHANCE, new JsonPrimitive(instance.stickChance));
-            json.add(STICK, new JsonPrimitive(instance.stick.getRegistryName().toString()));
+            json.add(STICK, new JsonPrimitive(instance.stick.getId().toString()));
             json.add(COUNT, new JsonPrimitive(instance.count));
             return json;
         }

@@ -1,4 +1,5 @@
 {
+  "type": "fiow:bonus_flint",
   "conditions": [
     {
       "condition": "minecraft:entity_properties",

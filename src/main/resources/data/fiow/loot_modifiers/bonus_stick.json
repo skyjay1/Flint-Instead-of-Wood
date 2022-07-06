@@ -1,4 +1,5 @@
 {
+  "type": "fiow:bonus_stick",
   "conditions": [
     {
       "condition": "minecraft:entity_properties",

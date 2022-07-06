@@ -28,8 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "fiow:flint_tool_head",
-      "fiow:flint_tool_head2"
+      "fiow:flint_tool_head"
     ]
   }
 }

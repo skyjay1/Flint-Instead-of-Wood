@@ -21,18 +21,20 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
 public class BonusFlintLootModifier extends LootModifier {
 
-    private final Block gravel;
+    private final RegistryObject<Block> gravel;
     private final float flintChance;
-    private final Item flint;
+    private final RegistryObject<Item> flint;
     private final int count;
 
-    protected BonusFlintLootModifier(final LootItemCondition[] conditionsIn, final Block gravel, final float flintChance, final Item flint, final int count) {
+    protected BonusFlintLootModifier(final LootItemCondition[] conditionsIn, final RegistryObject<Block> gravel,
+                                     final float flintChance, final RegistryObject<Item> flint, final int count) {
         super(conditionsIn);
         this.gravel = gravel;
         this.flintChance = flintChance;
@@ -43,15 +45,20 @@ public class BonusFlintLootModifier extends LootModifier {
     @Nonnull
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+        // do not apply when incorrectly parsed or loot is empty
+        if(!gravel.isPresent() || !flint.isPresent() || generatedLoot.isEmpty()) {
+            return generatedLoot;
+        }
+        // determine loot parameter values
         Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
         ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
         BlockState block = context.getParamOrNull(LootContextParams.BLOCK_STATE);
-        // do not apply when missing a value or no loot
-        if (entity == null || tool == null || block == null || generatedLoot.isEmpty()) {
+        // do not apply when missing a parameter
+        if (entity == null || tool == null || block == null) {
             return generatedLoot;
         }
         // do not apply when using other tools or breaking other blocks
-        if (tool.getItem() != FiowRegistry.FLINT_SHOVEL.get() || !block.is(gravel)) {
+        if (tool.getItem() != FiowRegistry.FLINT_SHOVEL.get() || !block.is(gravel.get())) {
             return generatedLoot;
         }
         // do not apply when using silk touch tool
@@ -64,7 +71,7 @@ public class BonusFlintLootModifier extends LootModifier {
             return generatedLoot;
         }
         // replace items with flint
-        return Lists.newArrayList(new ItemStack(flint, count));
+        return Lists.newArrayList(new ItemStack(flint.get(), count));
     }
 
     public static class Serializer extends GlobalLootModifierSerializer<BonusFlintLootModifier> {
@@ -76,13 +83,11 @@ public class BonusFlintLootModifier extends LootModifier {
 
         @Override
         public BonusFlintLootModifier read(ResourceLocation name, JsonObject object, LootItemCondition[] conditionsIn) {
-            String sGravelFallback = Blocks.GRAVEL.getRegistryName().toString();
-            ResourceLocation sGravel = new ResourceLocation(GsonHelper.getAsString(object, GRAVEL, sGravelFallback));
-            Block gravel = ForgeRegistries.BLOCKS.getValue(sGravel);
+            ResourceLocation gravelId = new ResourceLocation(GsonHelper.getAsString(object, GRAVEL, Blocks.GRAVEL.getRegistryName().toString()));
+            RegistryObject<Block> gravel = RegistryObject.create(gravelId, ForgeRegistries.BLOCKS);
             float chance = GsonHelper.getAsFloat(object, CHANCE, 0.5F);
-            String sFlintFallback = Items.FLINT.getRegistryName().toString();
-            ResourceLocation sFlint = new ResourceLocation(GsonHelper.getAsString(object, FLINT, sFlintFallback));
-            Item flint = ForgeRegistries.ITEMS.getValue(sFlint);
+            ResourceLocation flintId = new ResourceLocation(GsonHelper.getAsString(object, FLINT, Items.FLINT.getRegistryName().toString()));
+            RegistryObject<Item> flint = RegistryObject.create(flintId, ForgeRegistries.ITEMS);
             int count = GsonHelper.getAsInt(object, COUNT, 1);
             return new BonusFlintLootModifier(conditionsIn, gravel, chance, flint, count);
         }
@@ -90,9 +95,9 @@ public class BonusFlintLootModifier extends LootModifier {
         @Override
         public JsonObject write(BonusFlintLootModifier instance) {
             JsonObject json = makeConditions(instance.conditions);
-            json.add(GRAVEL, new JsonPrimitive(instance.gravel.getRegistryName().toString()));
+            json.add(GRAVEL, new JsonPrimitive(instance.gravel.getId().toString()));
             json.add(CHANCE, new JsonPrimitive(instance.flintChance));
-            json.add(FLINT, new JsonPrimitive(instance.flint.getRegistryName().toString()));
+            json.add(FLINT, new JsonPrimitive(instance.flint.getId().toString()));
             json.add(COUNT, new JsonPrimitive(instance.count));
             return json;
         }
