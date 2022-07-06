@@ -53,7 +53,7 @@ public final class FiowRegistry {
     public static final RegistryObject<Item> FLINT_HOE = ITEMS.register("flint_hoe", () ->
             new HoeItem(FlintItemTier.FLINT, 0, -3.0F, new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
     public static final RegistryObject<Item> FLINT_KNIFE = ITEMS.register("flint_knife", () ->
-            new KnifeItem(FlintItemTier.FLINT, 3, -1.7F, -2.0F, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
+            new KnifeItem(FlintItemTier.FLINT, 3, -1.7F, -1.0F, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
     public static final RegistryObject<Item> FLINT_SHOVEL = ITEMS.register("flint_shovel", () ->
             new ShovelItem(FlintItemTier.FLINT, 1.5F, -3.0F, new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)) {
                 @OnlyIn(Dist.CLIENT)
