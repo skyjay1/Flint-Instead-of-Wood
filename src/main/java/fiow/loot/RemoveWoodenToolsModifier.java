@@ -1,22 +1,19 @@
 package fiow.loot;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import fiow.Fiow;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -27,7 +24,7 @@ public class RemoveWoodenToolsModifier extends LootModifier {
 
     private final Map<Item, Item> itemMap;
 
-    protected RemoveWoodenToolsModifier(final ILootCondition[] conditionsIn, Map<Item, Item> itemMap) {
+    protected RemoveWoodenToolsModifier(final LootItemCondition[] conditionsIn, Map<Item, Item> itemMap) {
         super(conditionsIn);
         this.itemMap = itemMap;
     }
@@ -35,19 +32,19 @@ public class RemoveWoodenToolsModifier extends LootModifier {
     @Nonnull
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-        if(!Fiow.CONFIG.replaceInLoot()) {
+        if (!Fiow.CONFIG.replaceInLoot()) {
             return generatedLoot;
         }
         ResourceLocation lootTable = context.getQueriedLootTableId();
-        if(!(lootTable.getPath().contains("chests/") || lootTable.getPath().contains("gameplay/") )) {
+        if (!(lootTable.getPath().contains("chests/") || lootTable.getPath().contains("gameplay/"))) {
             return generatedLoot;
         }
         // iterate over loot and remove wooden tools
         List<ItemStack> modifiedLoot = new ArrayList<>();
-        for(ItemStack itemStack : generatedLoot) {
+        for (ItemStack itemStack : generatedLoot) {
             // replace items that are present in the map with their counterpart
             Item replace = itemMap.get(itemStack.getItem());
-            if(replace != null) {
+            if (replace != null) {
                 modifiedLoot.add(new ItemStack(replace, itemStack.getCount(), itemStack.getTag()));
             } else {
                 modifiedLoot.add(itemStack);
@@ -65,13 +62,13 @@ public class RemoveWoodenToolsModifier extends LootModifier {
         private static final String SWORD = Items.WOODEN_SWORD.getRegistryName().toString();
 
         @Override
-        public RemoveWoodenToolsModifier read(ResourceLocation name, JsonObject object, ILootCondition[] conditionsIn) {
+        public RemoveWoodenToolsModifier read(ResourceLocation name, JsonObject object, LootItemCondition[] conditionsIn) {
             // locate resource location for each item
-            ResourceLocation sAxe = new ResourceLocation(JSONUtils.getAsString(object, AXE, AXE));
-            ResourceLocation sHoe = new ResourceLocation(JSONUtils.getAsString(object, HOE, HOE));
-            ResourceLocation sPickaxe = new ResourceLocation(JSONUtils.getAsString(object, PICKAXE, PICKAXE));
-            ResourceLocation sShovel = new ResourceLocation(JSONUtils.getAsString(object, SHOVEL, SHOVEL));
-            ResourceLocation sSword = new ResourceLocation(JSONUtils.getAsString(object, SWORD, SWORD));
+            ResourceLocation sAxe = new ResourceLocation(GsonHelper.getAsString(object, AXE, AXE));
+            ResourceLocation sHoe = new ResourceLocation(GsonHelper.getAsString(object, HOE, HOE));
+            ResourceLocation sPickaxe = new ResourceLocation(GsonHelper.getAsString(object, PICKAXE, PICKAXE));
+            ResourceLocation sShovel = new ResourceLocation(GsonHelper.getAsString(object, SHOVEL, SHOVEL));
+            ResourceLocation sSword = new ResourceLocation(GsonHelper.getAsString(object, SWORD, SWORD));
 
             // build map for the given items
             ImmutableMap<Item, Item> map = new ImmutableMap

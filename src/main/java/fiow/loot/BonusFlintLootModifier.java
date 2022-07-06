@@ -4,20 +4,20 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import fiow.FiowRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,7 +32,7 @@ public class BonusFlintLootModifier extends LootModifier {
     private final Item flint;
     private final int count;
 
-    protected BonusFlintLootModifier(final ILootCondition[] conditionsIn, final Block gravel, final float flintChance, final Item flint, final int count) {
+    protected BonusFlintLootModifier(final LootItemCondition[] conditionsIn, final Block gravel, final float flintChance, final Item flint, final int count) {
         super(conditionsIn);
         this.gravel = gravel;
         this.flintChance = flintChance;
@@ -43,23 +43,24 @@ public class BonusFlintLootModifier extends LootModifier {
     @Nonnull
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-        Entity entity = context.getParamOrNull(LootParameters.THIS_ENTITY);
-        ItemStack tool = context.getParamOrNull(LootParameters.TOOL);
-        BlockState block = context.getParamOrNull(LootParameters.BLOCK_STATE);
+        Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
+        ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
+        BlockState block = context.getParamOrNull(LootContextParams.BLOCK_STATE);
         // do not apply when missing a value or no loot
-        if(entity == null || tool == null || block == null || generatedLoot.isEmpty()) {
+        if (entity == null || tool == null || block == null || generatedLoot.isEmpty()) {
             return generatedLoot;
         }
         // do not apply when using other tools or breaking other blocks
-        if(tool.getItem() != FiowRegistry.FLINT_SHOVEL.get() || !block.is(gravel)) {
+        if (tool.getItem() != FiowRegistry.FLINT_SHOVEL.get() || !block.is(gravel)) {
             return generatedLoot;
         }
         // do not apply when using silk touch tool
-        if(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, tool) > 0) {
+        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, tool) > 0) {
             return generatedLoot;
         }
         // determine if loot bonus should apply
-        if(entity.level.getRandom().nextFloat() > this.flintChance * (1 + EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool))) {
+        float fortune = (float) EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
+        if (entity.level.getRandom().nextFloat() > this.flintChance * (1.0F + fortune)) {
             return generatedLoot;
         }
         // replace items with flint
@@ -74,15 +75,15 @@ public class BonusFlintLootModifier extends LootModifier {
         private static final String COUNT = "count";
 
         @Override
-        public BonusFlintLootModifier read(ResourceLocation name, JsonObject object, ILootCondition[] conditionsIn) {
+        public BonusFlintLootModifier read(ResourceLocation name, JsonObject object, LootItemCondition[] conditionsIn) {
             String sGravelFallback = Blocks.GRAVEL.getRegistryName().toString();
-            ResourceLocation sGravel = new ResourceLocation(JSONUtils.getAsString(object, GRAVEL, sGravelFallback));
+            ResourceLocation sGravel = new ResourceLocation(GsonHelper.getAsString(object, GRAVEL, sGravelFallback));
             Block gravel = ForgeRegistries.BLOCKS.getValue(sGravel);
-            float chance = JSONUtils.getAsFloat(object, CHANCE, 0.5F);
+            float chance = GsonHelper.getAsFloat(object, CHANCE, 0.5F);
             String sFlintFallback = Items.FLINT.getRegistryName().toString();
-            ResourceLocation sFlint = new ResourceLocation(JSONUtils.getAsString(object, FLINT, sFlintFallback));
+            ResourceLocation sFlint = new ResourceLocation(GsonHelper.getAsString(object, FLINT, sFlintFallback));
             Item flint = ForgeRegistries.ITEMS.getValue(sFlint);
-            int count = JSONUtils.getAsInt(object, COUNT, 1);
+            int count = GsonHelper.getAsInt(object, COUNT, 1);
             return new BonusFlintLootModifier(conditionsIn, gravel, chance, flint, count);
         }
 

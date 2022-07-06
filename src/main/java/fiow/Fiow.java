@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -38,11 +39,11 @@ public final class Fiow {
 
     }
 
-    public static void loadConfig(final ModConfig.Loading event) {
+    public static void loadConfig(final ModConfigEvent.Loading event) {
         CONFIG.bake();
     }
 
-    public static void reloadConfig(final ModConfig.Reloading event) {
+    public static void reloadConfig(final ModConfigEvent.Reloading event) {
         CONFIG.bake();
     }
 }
