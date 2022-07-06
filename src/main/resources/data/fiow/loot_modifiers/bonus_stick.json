@@ -1,0 +1,15 @@
+{
+  "conditions": [
+    {
+      "condition": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type": "minecraft:player"
+      }
+    }
+  ],
+  "chance": 0.30,
+  "leaves": "minecraft:leaves",
+  "stick": "minecraft:stick",
+  "count": 1
+}

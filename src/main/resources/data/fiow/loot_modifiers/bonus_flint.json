@@ -1,0 +1,15 @@
+{
+  "conditions": [
+    {
+      "condition": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "type": "minecraft:player"
+      }
+    }
+  ],
+  "chance": 0.25,
+  "flint": "minecraft:flint",
+  "gravel": "minecraft:gravel",
+  "count": 1
+}

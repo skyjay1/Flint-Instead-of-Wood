@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "tag": "forge:rods/wooden"
+    },
+    "X": {
+      "item": "fiow:flint_tool_head"
+    }
+  },
+  "pattern": [
+    "X",
+    "S"
+  ],
+  "result": {
+    "item": "fiow:flint_knife"
+  }
+}

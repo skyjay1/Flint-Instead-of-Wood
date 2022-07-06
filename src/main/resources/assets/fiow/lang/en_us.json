@@ -1,0 +1,10 @@
+{
+  "item.fiow.flint_axe": "Flint Hatchet",
+  "item.fiow.flint_hoe": "Flint Hoe",
+  "item.fiow.flint_knife": "Flint Knife",
+  "item.fiow.flint_shovel": "Flint Spade",
+  "item.fiow.flint_shovel.tooltip": "Bonus flint from gravel",
+  "item.fiow.flint_pickaxe": "Flint Pick",
+  "item.fiow.flint_tool_head": "Flint Tool Head",
+  "death.attack.log": "%1$s died whilst punching a tree"
+}

@@ -1,0 +1,23 @@
+# SEE AN EXAMPLE AT https://github.com/MinecraftForge/MinecraftForge/blob/1.14.x/mods.toml
+
+# The name of the mod loader type to load
+modLoader="javafml"
+# A version range to match for said mod loader
+loaderVersion="[36,)"
+# The license for your mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
+license="All Rights Reserved"
+# A URL to refer people to when problems occur with this mod
+issueTrackerURL="https://github.com/skyjay1/Flint-Instead-of-Wood/issues"
+
+[[mods]]
+    modId="fiow"
+    version="16.5.0"
+    displayName="Flint Instead of Wood"
+    authors="skyjay1"
+    description='''Replaces wooden tools with flint ones. It makes more sense!'''
+[[dependencies.fiow]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
