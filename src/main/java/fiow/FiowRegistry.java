@@ -7,7 +7,6 @@ import fiow.loot.BonusStickLootModifier;
 import fiow.loot.RemoveWoodenToolsModifier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.HoeItem;
@@ -17,8 +16,6 @@ import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -56,9 +53,9 @@ public final class FiowRegistry {
             new KnifeItem(FlintItemTier.FLINT, 3, -1.7F, -1.0F, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
     public static final RegistryObject<Item> FLINT_SHOVEL = ITEMS.register("flint_shovel", () ->
             new ShovelItem(FlintItemTier.FLINT, 1.5F, -3.0F, new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)) {
-                @OnlyIn(Dist.CLIENT)
+                @Override
                 public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> text, TooltipFlag flag) {
-                    text.add(new TranslatableComponent(itemStack.getItem().getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
+                    text.add(Component.translatable(itemStack.getItem().getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
                 }
             });
     public static final RegistryObject<Item> FLINT_PICKAXE = ITEMS.register("flint_pickaxe", () ->

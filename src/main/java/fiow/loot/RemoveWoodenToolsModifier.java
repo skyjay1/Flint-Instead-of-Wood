@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import fiow.Fiow;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
@@ -17,8 +18,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class RemoveWoodenToolsModifier extends LootModifier {
@@ -32,7 +31,7 @@ public class RemoveWoodenToolsModifier extends LootModifier {
 
     @Nonnull
     @Override
-    protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+    protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         if (!Fiow.CONFIG.replaceInLoot()) {
             return generatedLoot;
         }
@@ -41,10 +40,10 @@ public class RemoveWoodenToolsModifier extends LootModifier {
             return generatedLoot;
         }
         // iterate over loot and remove wooden tools
-        List<ItemStack> modifiedLoot = new ArrayList<>();
+        ObjectArrayList<ItemStack> modifiedLoot = new ObjectArrayList<>();
         for (ItemStack itemStack : generatedLoot) {
             // replace items that are present in the map with their counterpart
-            RegistryObject<Item> replace = itemMap.get(itemStack.getItem().getRegistryName());
+            RegistryObject<Item> replace = itemMap.get(ForgeRegistries.ITEMS.getKey(itemStack.getItem()));
             if (replace != null && replace.isPresent()) {
                 modifiedLoot.add(new ItemStack(replace.get(), itemStack.getCount(), itemStack.getTag()));
             } else {
@@ -56,11 +55,11 @@ public class RemoveWoodenToolsModifier extends LootModifier {
 
     public static class Serializer extends GlobalLootModifierSerializer<RemoveWoodenToolsModifier> {
 
-        private static final String AXE = Items.WOODEN_AXE.getRegistryName().toString();
-        private static final String HOE = Items.WOODEN_HOE.getRegistryName().toString();
-        private static final String PICKAXE = Items.WOODEN_PICKAXE.getRegistryName().toString();
-        private static final String SHOVEL = Items.WOODEN_SHOVEL.getRegistryName().toString();
-        private static final String SWORD = Items.WOODEN_SWORD.getRegistryName().toString();
+        private static final String AXE = ForgeRegistries.ITEMS.getKey(Items.WOODEN_AXE).toString();
+        private static final String HOE = ForgeRegistries.ITEMS.getKey(Items.WOODEN_HOE).toString();
+        private static final String PICKAXE = ForgeRegistries.ITEMS.getKey(Items.WOODEN_PICKAXE).toString();
+        private static final String SHOVEL = ForgeRegistries.ITEMS.getKey(Items.WOODEN_SHOVEL).toString();
+        private static final String SWORD = ForgeRegistries.ITEMS.getKey(Items.WOODEN_SWORD).toString();
 
         @Override
         public RemoveWoodenToolsModifier read(ResourceLocation name, JsonObject object, LootItemCondition[] conditionsIn) {
@@ -74,11 +73,11 @@ public class RemoveWoodenToolsModifier extends LootModifier {
             // build map for the given items
             ImmutableMap<ResourceLocation, RegistryObject<Item>> map = new ImmutableMap
                     .Builder<ResourceLocation, RegistryObject<Item>>()
-                    .put(Items.WOODEN_AXE.getRegistryName(), RegistryObject.create(axeId, ForgeRegistries.ITEMS))
-                    .put(Items.WOODEN_HOE.getRegistryName(), RegistryObject.create(hoeId, ForgeRegistries.ITEMS))
-                    .put(Items.WOODEN_PICKAXE.getRegistryName(), RegistryObject.create(pickaxeId, ForgeRegistries.ITEMS))
-                    .put(Items.WOODEN_SHOVEL.getRegistryName(), RegistryObject.create(shovelId, ForgeRegistries.ITEMS))
-                    .put(Items.WOODEN_SWORD.getRegistryName(), RegistryObject.create(swordId, ForgeRegistries.ITEMS))
+                    .put(ForgeRegistries.ITEMS.getKey(Items.WOODEN_AXE), RegistryObject.create(axeId, ForgeRegistries.ITEMS))
+                    .put(ForgeRegistries.ITEMS.getKey(Items.WOODEN_HOE), RegistryObject.create(hoeId, ForgeRegistries.ITEMS))
+                    .put(ForgeRegistries.ITEMS.getKey(Items.WOODEN_PICKAXE), RegistryObject.create(pickaxeId, ForgeRegistries.ITEMS))
+                    .put(ForgeRegistries.ITEMS.getKey(Items.WOODEN_SHOVEL), RegistryObject.create(shovelId, ForgeRegistries.ITEMS))
+                    .put(ForgeRegistries.ITEMS.getKey(Items.WOODEN_SWORD), RegistryObject.create(swordId, ForgeRegistries.ITEMS))
                     .build();
 
             return new RemoveWoodenToolsModifier(conditionsIn, map);
@@ -88,11 +87,11 @@ public class RemoveWoodenToolsModifier extends LootModifier {
         public JsonObject write(RemoveWoodenToolsModifier instance) {
             RegistryObject<Item> AIR = RegistryObject.create(new ResourceLocation("air"), ForgeRegistries.ITEMS);
             JsonObject json = makeConditions(instance.conditions);
-            json.add(AXE, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_AXE.getRegistryName(), AIR).getId().toString()));
-            json.add(HOE, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_HOE.getRegistryName(), AIR).getId().toString()));
-            json.add(PICKAXE, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_PICKAXE.getRegistryName(), AIR).getId().toString()));
-            json.add(SHOVEL, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_SHOVEL.getRegistryName(), AIR).getId().toString()));
-            json.add(SWORD, new JsonPrimitive(instance.itemMap.getOrDefault(Items.WOODEN_SWORD.getRegistryName(), AIR).getId().toString()));
+            json.add(AXE, new JsonPrimitive(instance.itemMap.getOrDefault(ForgeRegistries.ITEMS.getKey(Items.WOODEN_AXE), AIR).getId().toString()));
+            json.add(HOE, new JsonPrimitive(instance.itemMap.getOrDefault(ForgeRegistries.ITEMS.getKey(Items.WOODEN_HOE), AIR).getId().toString()));
+            json.add(PICKAXE, new JsonPrimitive(instance.itemMap.getOrDefault(ForgeRegistries.ITEMS.getKey(Items.WOODEN_PICKAXE), AIR).getId().toString()));
+            json.add(SHOVEL, new JsonPrimitive(instance.itemMap.getOrDefault(ForgeRegistries.ITEMS.getKey(Items.WOODEN_SHOVEL), AIR).getId().toString()));
+            json.add(SWORD, new JsonPrimitive(instance.itemMap.getOrDefault(ForgeRegistries.ITEMS.getKey(Items.WOODEN_SWORD), AIR).getId().toString()));
             return json;
         }
     }

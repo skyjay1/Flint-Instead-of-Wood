@@ -2,15 +2,30 @@
   "type": "fiow:bonus_flint",
   "conditions": [
     {
+      "condition": "minecraft:block_state_property",
+      "block": "minecraft:gravel"
+    },
+    {
       "condition": "minecraft:entity_properties",
       "entity": "this",
       "predicate": {
         "type": "minecraft:player"
       }
+    },
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "items": [
+          "fiow:flint_shovel"
+        ]
+      }
+    },
+    {
+      "condition": "minecraft:random_chance_with_looting",
+      "chance": 0.25,
+      "looting_multiplier": 0.15
     }
   ],
-  "chance": 0.25,
   "flint": "minecraft:flint",
-  "gravel": "minecraft:gravel",
   "count": 1
 }

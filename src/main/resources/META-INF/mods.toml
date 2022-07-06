@@ -3,7 +3,7 @@
 # The name of the mod loader type to load
 modLoader="javafml"
 # A version range to match for said mod loader
-loaderVersion="[40,)"
+loaderVersion="[41,)"
 # The license for your mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
 license="All Rights Reserved"
 # A URL to refer people to when problems occur with this mod
@@ -11,13 +11,13 @@ issueTrackerURL="https://github.com/skyjay1/Flint-Instead-of-Wood/issues"
 
 [[mods]]
     modId="fiow"
-    version="18.2.0"
+    version="19.0.0"
     displayName="Flint Instead of Wood"
     authors="skyjay1"
     description='''Replaces wooden tools with flint tools. It makes more sense!'''
 [[dependencies.fiow]]
     modId="forge"
     mandatory=true
-    versionRange="[40,)"
+    versionRange="[41,)"
     ordering="NONE"
     side="BOTH"

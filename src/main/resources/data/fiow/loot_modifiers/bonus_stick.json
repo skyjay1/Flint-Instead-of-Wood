@@ -7,9 +7,13 @@
       "predicate": {
         "type": "minecraft:player"
       }
+    },
+    {
+      "condition": "minecraft:random_chance_with_looting",
+      "chance": 0.3,
+      "looting_multiplier": 0.15
     }
   ],
-  "chance": 0.30,
   "leaves": "minecraft:leaves",
   "stick": "minecraft:stick",
   "count": 1
