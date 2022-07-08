@@ -74,38 +74,6 @@ public final class FiowEvents {
                 event.setCanceled(true);
                 return;
             }
-            // cancel when using knife and target is out of range
-            if(itemStack.getItem() instanceof KnifeItem) {
-                // determine if target is within range
-                final AttributeInstance reachDistance = event.getPlayer().getAttribute(ForgeMod.REACH_DISTANCE.get());
-                if(reachDistance != null) {
-                    // raytrace along the reach distance to check for the hit entity
-                    final double length = reachDistance.getValue() - 1.0D;
-                    final Vec3 eyeVec = event.getPlayer().getEyePosition(1.0F);
-                    final Vec3 lookVec = event.getPlayer().getLookAngle();
-                    Vec3 stepVec;
-                    Vec3 startVec;
-                    Vec3 endVec;
-                    AABB box;
-                    boolean hitEntity = false;
-                    // step over the look vector until an entity is found
-                    for (float step = 0, delta = 0.25F, expand = delta * 0.5F; step < length; step += delta) {
-                        stepVec = eyeVec.add(lookVec.scale(step));
-                        startVec = stepVec.subtract(expand, expand, expand);
-                        endVec = stepVec.add(expand, expand, expand);
-                        box = new AABB(startVec, endVec);
-                        if (!event.getPlayer().level.getEntities(event.getPlayer(), box).isEmpty()) {
-                            hitEntity = true;
-                            break;
-                        }
-                    }
-                    // cancel event when no entity is within range
-                    if(!hitEntity) {
-                        event.setCanceled(true);
-                        return;
-                    }
-                }
-            }
         }
     }
 
