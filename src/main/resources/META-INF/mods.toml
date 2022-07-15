@@ -11,13 +11,13 @@ issueTrackerURL="https://github.com/skyjay1/Flint-Instead-of-Wood/issues"
 
 [[mods]]
     modId="fiow"
-    version="19.0.0"
+    version="19.0.1"
     displayName="Flint Instead of Wood"
     authors="skyjay1"
     description='''Replaces wooden tools with flint tools. It makes more sense!'''
 [[dependencies.fiow]]
     modId="forge"
     mandatory=true
-    versionRange="[41,)"
+    versionRange="[41.0.98,)"
     ordering="NONE"
     side="BOTH"

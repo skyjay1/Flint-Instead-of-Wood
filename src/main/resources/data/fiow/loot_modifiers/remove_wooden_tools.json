@@ -1,11 +1,20 @@
 {
-  "type": "fiow:remove_wooden_tools",
+  "type": "fiow:replace_in_chest",
   "conditions": [
 
   ],
-  "minecraft:wooden_axe": "fiow:flint_axe",
-  "minecraft:wooden_hoe": "fiow:flint_hoe",
-  "minecraft:wooden_pickaxe": "fiow:flint_pickaxe",
-  "minecraft:wooden_shovel": "fiow:flint_shovel",
-  "minecraft:wooden_sword": "fiow:flint_sword"
+  "paths": [
+    "chests/",
+    "gameplay/"
+  ],
+  "replace": {
+    "minecraft:wooden_axe": {
+      "id": "fiow:flint_axe",
+      "Count": 1
+    },
+    "minecraft:wooden_hoe": "fiow:flint_hoe",
+    "minecraft:wooden_pickaxe": "fiow:flint_pickaxe",
+    "minecraft:wooden_shovel": "fiow:flint_shovel",
+    "minecraft:wooden_sword": "fiow:flint_knife"
+  }
 }

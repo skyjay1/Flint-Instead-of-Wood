@@ -38,13 +38,13 @@ public final class FiowEvents {
                 return;
             }
             // check held item to determine result
-            ItemStack itemStack = event.getPlayer().getMainHandItem();
+            ItemStack itemStack = event.getEntity().getMainHandItem();
             if(Fiow.CONFIG.breakLogRequiresAxe()) {
                 // check if axe is required but player is not holding axe
                 if(!itemStack.canPerformAction(ToolActions.AXE_DIG)) {
                     event.setCanceled(true);
                 }
-            } else if(Fiow.CONFIG.breakLogHurts() && event.getPlayer().hurtTime == 0) {
+            } else if(Fiow.CONFIG.breakLogHurts() && event.getEntity().hurtTime == 0) {
                 // check if breaking can hurt and player is not holding a tool
                 boolean hasAnyTool = false;
                 for(ToolAction action : ANY_TOOL) {
@@ -58,17 +58,17 @@ public final class FiowEvents {
                     // 1 health per 7 hits per log with no tool
                     float amount = 0.1428571428571F;
                     // multiply damage when player has high health (to get the player's attention)
-                    if(event.getPlayer().getHealth() / event.getPlayer().getMaxHealth() > 0.75F) {
+                    if(event.getEntity().getHealth() / event.getEntity().getMaxHealth() > 0.75F) {
                         amount *= 4;
                     }
-                    event.getPlayer().hurt(LOG, amount);
+                    event.getEntity().hurt(LOG, amount);
                 }
             }
         }
 
         @SubscribeEvent
         public static void onAttackTarget(final AttackEntityEvent event) {
-            ItemStack itemStack = event.getPlayer().getMainHandItem();
+            ItemStack itemStack = event.getEntity().getMainHandItem();
             // cancel when using wooden tools
             if(Fiow.CONFIG.woodenToolsCannotAttack() && itemStack.is(ItemTags.create(WOODEN_TOOLS))) {
                 event.setCanceled(true);

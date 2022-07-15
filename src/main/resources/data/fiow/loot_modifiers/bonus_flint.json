@@ -1,5 +1,5 @@
 {
-  "type": "fiow:bonus_flint",
+  "type": "fiow:bonus_item",
   "conditions": [
     {
       "condition": "minecraft:block_state_property",
@@ -21,11 +21,30 @@
       }
     },
     {
+      "condition": "minecraft:inverted",
+      "term":  {
+        "condition": "minecraft:match_tool",
+        "predicate": {
+          "enchantments": [
+            {
+              "enchantment": "minecraft:silk_touch",
+              "levels": {
+                "min": 1
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
       "condition": "minecraft:random_chance_with_looting",
       "chance": 0.25,
       "looting_multiplier": 0.15
     }
   ],
-  "flint": "minecraft:flint",
-  "count": 1
+  "bonus_item": {
+    "id": "minecraft:flint",
+    "Count": 1
+  },
+  "replace": true
 }

@@ -1,10 +1,10 @@
 package fiow;
 
+import com.mojang.serialization.Codec;
 import fiow.item.FlintItemTier;
 import fiow.item.KnifeItem;
-import fiow.loot.BonusFlintLootModifier;
-import fiow.loot.BonusStickLootModifier;
-import fiow.loot.RemoveWoodenToolsModifier;
+import fiow.loot.BonusItemLootModifier;
+import fiow.loot.ReplaceInChestLootModifier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.AxeItem;
@@ -16,7 +16,7 @@ import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -29,7 +29,7 @@ import java.util.List;
 public final class FiowRegistry {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Fiow.MODID);
-    public static final DeferredRegister<GlobalLootModifierSerializer<?>> LOOT_MODIFIER_SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, Fiow.MODID);
+    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIER_SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Fiow.MODID);
 
     public static void register() {
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -62,12 +62,10 @@ public final class FiowRegistry {
             new PickaxeItem(FlintItemTier.FLINT, 1, -2.8F, new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
 
     //// LOOT MODIFIERS ////
-    public static final RegistryObject<BonusFlintLootModifier.Serializer> BONUS_FLINT_LOOT_MODIFIER = LOOT_MODIFIER_SERIALIZERS.register(
-            "bonus_flint", () -> new BonusFlintLootModifier.Serializer());
-    public static final RegistryObject<BonusStickLootModifier.Serializer> BONUS_STICK_LOOT_MODIFIER = LOOT_MODIFIER_SERIALIZERS.register(
-            "bonus_stick", () -> new BonusStickLootModifier.Serializer());
-    public static final RegistryObject<RemoveWoodenToolsModifier.Serializer> REMOVE_WOODEN_TOOLS_MODIFIER = LOOT_MODIFIER_SERIALIZERS.register(
-            "remove_wooden_tools", () -> new RemoveWoodenToolsModifier.Serializer());
+    public static final RegistryObject<Codec<? extends BonusItemLootModifier>> BONUS_FLINT_LOOT_MODIFIER = LOOT_MODIFIER_SERIALIZERS.register(
+            "bonus_item", BonusItemLootModifier.CODEC);
+    public static final RegistryObject<Codec<? extends ReplaceInChestLootModifier>> REPLACE_IN_CHEST_LOOT_MODIFIER = LOOT_MODIFIER_SERIALIZERS.register(
+            "replace_in_chest", ReplaceInChestLootModifier.CODEC);
 
 
 }

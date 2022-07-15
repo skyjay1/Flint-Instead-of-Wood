@@ -1,5 +1,5 @@
 {
-  "type": "fiow:bonus_stick",
+  "type": "fiow:bonus_item",
   "conditions": [
     {
       "condition": "minecraft:entity_properties",
@@ -9,12 +9,44 @@
       }
     },
     {
+      "condition": "minecraft:inverted",
+      "term": {
+        "condition": "minecraft:alternative",
+        "terms": [
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": [
+                "minecraft:shears"
+              ]
+            }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "enchantments": [
+                {
+                  "enchantment": "minecraft:silk_touch",
+                  "levels": {
+                    "min": 1
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
       "condition": "minecraft:random_chance_with_looting",
       "chance": 0.3,
       "looting_multiplier": 0.15
     }
   ],
-  "leaves": "minecraft:leaves",
-  "stick": "minecraft:stick",
-  "count": 1
+  "bonus_item": {
+    "id": "minecraft:stick",
+    "Count": 1
+  },
+  "block_tag": "minecraft:leaves",
+  "replace": false
 }
